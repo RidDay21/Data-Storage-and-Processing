@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'ru.nsu.laptev'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.78'
+}
+
+task runServer(type: JavaExec) {
+    group = "application"
+    mainClass = 'ru.nsu.laptev.KeyGenerationServer'
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['8080', '4', 'CN=MyTestCA', 'secret/ca_private_key.pem']
+}
+
+task runClient(type: JavaExec) {
+    group = "application"
+    mainClass = 'ru.nsu.laptev.KeyClient'
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['localhost', '8080', 'Nik', '10', 'false']  // хост, порт, имя, задержка, аварийное_завершение
+}
